@@ -3,11 +3,21 @@ import fs from "fs";
 import readline from "readline-sync";
 import open from "open";
 
-const playerName = "your_uia_email@uia.no";  // Replace with your UiA email
-const baseUrl = "https://alchemy-kd0l.onrender.com";  // API base URL
-const solutionsFile = "solutions.json";  // Stores previous answers
-const skeletonKeyFile = "skeletonKey.txt";  // Stores final puzzle key
+const playerName = "your_uia_email@uia.no";  
+const baseUrl = "https://alchemy-kd0l.onrender.com";  
+const solutionsFile = "solutions.json";  
+const skeletonKeyFile = "skeletonKey.txt";  
 
+
+async function startGame() {
+    try {
+        const response = await axios.get(`${baseUrl}/start?player=${playerName}`);
+        console.log("New Challenge:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error starting game:", error.message);
+    }
+}
 function loadSolutions() {
   try {
     return JSON.parse(fs.readFileSync(solutionsFile));
@@ -44,7 +54,6 @@ function loadSolutions() {
                 console.log("Correct! Next challenge:", response.data.next);
                 saveSolution(challenge, answer);
     
-                // If it's the final challenge, store the key
                 if (response.data.finalKey) {
                     fs.writeFileSync(skeletonKeyFile, response.data.finalKey);
                     console.log("Final Key saved in skeletonKey.txt!");
@@ -56,6 +65,16 @@ function loadSolutions() {
             }
         } catch (error) {
             console.error("Error submitting answer:", error.message);
+        }
+    }
+
+    async function getClue() {
+        try {
+            const response = await axios.get(`${baseUrl}/clue?player=${playerName}`);
+            console.log("Clue URL:", response.data);
+            open(response.data);
+        } catch (error) {
+            console.error("Error getting clue:", error.message);
         }
     }
 
