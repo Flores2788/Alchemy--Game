@@ -14,4 +14,10 @@ function loadSolutions() {
   } catch (error) {
     return {};
   }
-}
+    }
+  
+    function saveSolution(challenge, answer) {
+        const solutions = loadSolutions();
+        solutions[challenge] = answer;
+        fs.writeFileSync(solutionsFile, JSON.stringify(solutions, null, 2));
+    }
