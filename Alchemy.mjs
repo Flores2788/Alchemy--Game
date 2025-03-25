@@ -78,3 +78,28 @@ function loadSolutions() {
         }
     }
 
+    async function main() {
+        let challenge = await startGame();
+        const solutions = loadSolutions();
+    
+        while (challenge) {
+            if (solutions[challenge]) {
+                console.log("Using saved answer:", solutions[challenge]);
+                challenge = await submitAnswer(challenge, solutions[challenge]);
+            } else {
+                let action = readline.question("(Type answer, 'clue' to get a hint, or 'exit' to quit): ");
+    
+                if (action.toLowerCase() === "clue") {
+                    await getClue();
+                } else if (action.toLowerCase() === "exit") {
+                    console.log("Exiting. Ciao!");
+                    break;
+                } else {
+                    challenge = await submitAnswer(challenge, action);
+                }
+            }
+        }
+    }
+    
+
+    main();
