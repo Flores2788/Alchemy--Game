@@ -23,10 +23,23 @@ function loadSolutions() {
     }
 
     async function getChallenge() {
+        try {
         const response = await axios.get(`${baseUrl}/challenge/${playerName}`);
         console.log("Challenge:", response.data);
         return response.data;
     }   catch (error) {
         console.error("Failed to get challenge:", error);
         process.exit(1);
+    }
+    }
+
+    async function submitSolution(challenge, answer) {
+        try {
+        const response = await axios.post(`${baseUrl}/challenge/${playerName}`, { challenge, answer });
+        console.log("Response:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to submit solution:", error);
+        process.exit(1);
+    }
     }
