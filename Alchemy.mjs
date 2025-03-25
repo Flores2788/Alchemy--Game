@@ -21,3 +21,12 @@ function loadSolutions() {
         solutions[challenge] = answer;
         fs.writeFileSync(solutionsFile, JSON.stringify(solutions, null, 2));
     }
+
+    async function getChallenge() {
+        const response = await axios.get(`${baseUrl}/challenge/${playerName}`);
+        console.log("Challenge:", response.data);
+        return response.data;
+    }   catch (error) {
+        console.error("Failed to get challenge:", error);
+        process.exit(1);
+    }
