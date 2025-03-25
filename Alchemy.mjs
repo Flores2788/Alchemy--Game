@@ -87,7 +87,7 @@ function loadSolutions() {
                 console.log("Using saved answer:", solutions[challenge]);
                 challenge = await submitAnswer(challenge, solutions[challenge]);
             } else {
-                let action = readline.question("(Type answer, 'clue' to get a hint, or 'exit' to quit): ");
+                let action = readline.question("Type answer, 'clue' to get a hint, or 'exit' to quit");
     
                 if (action.toLowerCase() === "clue") {
                     await getClue();
