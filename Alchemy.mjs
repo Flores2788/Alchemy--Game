@@ -33,13 +33,29 @@ function loadSolutions() {
     }
     }
 
-    async function submitSolution(challenge, answer) {
+    async function submitAnswer(challenge, answer) {
         try {
-        const response = await axios.post(`${baseUrl}/challenge/${playerName}`, { challenge, answer });
-        console.log("Response:", response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Failed to submit solution:", error);
-        process.exit(1);
+            const response = await axios.post(`${baseUrl}/answer`, {
+                player: playerName,
+                answer: answer
+            });
+    
+            if (response.data.correct) {
+                console.log("Correct! Next challenge:", response.data.next);
+                saveSolution(challenge, answer);
+    
+                // If it's the final challenge, store the key
+                if (response.data.finalKey) {
+                    fs.writeFileSync(skeletonKeyFile, response.data.finalKey);
+                    console.log("Final Key saved in skeletonKey.txt!");
+                }
+    
+                return response.data.next;
+            } else {
+                console.log("Incorrect! Try again.");
+            }
+        } catch (error) {
+            console.error("Error submitting answer:", error.message);
+        }
     }
-    }
+
